@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="sidemenu1"></ion-menu-button>
+    </ion-buttons>
+    <ion-title mode="ios"> Home </ion-title>
+    <ion-button fill="clear" slot="end" routerLink="/main/tabs/cart">
+      <ion-icon class="ecom-icon-for-badge" color="dark" name="cart"></ion-icon>
+      <ion-badge class="ecom-cart-badge" color="danger">{{ totalCartItems }}</ion-badge>
+    </ion-button>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<!-- <ion-button color="primary" routerLink="/main/tabs/home/product-details">Product</ion-button> -->
+
+  <ion-slides *ngIf="!isLoading" pager="true" #slider (ionSlidesDidLoad)="slidesDidLoad(slider)" [options]="slideOpts">
+    <ion-slide>
+      <img src="https://thumbs.dreamstime.com/b/delivery-man-scooter-food-deliveries-courier-delivering-city-bike-route-vector-illustration-meal-logistic-service-driver-151869860.jpg"/>
+    </ion-slide>
+    <ion-slide>
+      <img src="https://static.wixstatic.com/media/86800a_6d442591baaa4a8e9bfc6dc150852c55~mv2.png/v1/fill/w_630,h_352,al_c,q_85,usm_0.66_1.00_0.01/86800a_6d442591baaa4a8e9bfc6dc150852c55~mv2.webp"/>
+    </ion-slide>
+    <ion-slide>
+      <img src="https://image.freepik.com/free-vector/delivery-express-by-parcel-delivery-person-with-scooter-truck-by-e-commerce-system-smartphone-computer-isometric-flat-design-illustration_82984-723.jpg"/>
+    </ion-slide>
+  </ion-slides>
+
+  <ion-grid *ngIf="!isLoading">
+    <ion-row>
+      <ion-col>
+        <ion-card routerLink="/main/tabs/category">
+          <div class="home-icon">
+            <ion-icon color="tertiary" name="american-football"></ion-icon>
+          </div>
+          <div class="home-lab">
+            <ion-label>Categories</ion-label>
+          </div>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card>
+          <div class="home-icon">
+            <ion-icon color="success" name="ellipse"></ion-icon>
+          </div>
+          <div class="home-lab">
+            <ion-label>Offers</ion-label>
+          </div>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card>
+          <div class="home-icon">
+            <ion-icon color="danger" name="headset"></ion-icon>
+          </div>
+          <div class="home-lab">
+            <ion-label>Products</ion-label>
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="isLoading">
+  <ion-row>
+    <ion-col class="ion-text-center">
+      <ion-spinner name="lines" color="primary"></ion-spinner>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<ion-grid class="pd-0" *ngIf="!isLoading">
+  <ion-row class="pd-0">
+
+        <!-- <ion-item class="two-column" lines="none" *ngFor="let product of products"> -->
+          <ion-col class="ion-margin-bottom" size="6" *ngFor="let product of moreProducts" >
+            <ion-card *ngIf="product.images.length>0" routerLink="/main/tabs/home/{{product.id}}">
+              <ion-img [src]="product.images[0].src "></ion-img>
+            </ion-card>
+                <div class="ecom-pro-size">
+                  <ion-label>
+                    <p class="ecom-font-black ion-text-left pt-10 slim-text">{{ product.name }}</p>
+                    <p *ngIf="product.regular_price != product.price && product.regular_price != ''" class="ion-text-left ion-float-left mr-15 ecom-font-blue"><del>{{ product.regular_price }}</del></p>
+                    <p class="ion-text-left ecom-font-purple">{{ product.price }} {{currency}}</p>
+                    <!-- <p class="ion-text-left">{{ product.sale_price }} Tk</p> -->
+                  </ion-label>
+                </div>  
+          </ion-col>
+          <ion-infinite-scroll threshold="50px" (ionInfinite)="loadMoreProducts($event)">
+            <ion-infinite-scroll-content
+              loadingSpinner="bubbles"
+              loadingText="Loading more products...">
+            </ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+        <!-- </ion-item> -->
+  </ion-row>
+</ion-grid>
+</ion-content>
